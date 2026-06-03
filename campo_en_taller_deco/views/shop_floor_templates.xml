@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="kpi_shop_floor_order_line_inherit"
+              inherit_id="mrp_workorder.shop_floor_order_line"
+              name="KPI Shop Floor Order Line Inherit">
+
+        <xpath expr=".//div[contains(@class,'o_mrp_shop_floor_order_product')]" position="inside">
+            <t t-if="workorder and workorder.production_id and workorder.production_id.x_studio_especificaciones_taller">
+                <div class="o_kpi_sf_specs">
+                    <span t-esc="workorder.production_id.x_studio_especificaciones_taller"/>
+                </div>
+            </t>
+        </xpath>
+
+    </template>
+</odoo>
