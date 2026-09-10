@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_task_kanban_global_timer" model="ir.ui.view">
+        <name>project.task.kanban.global.timer</name>
+        <model>project.task</model>
+        <inherit_id ref="industry_fsm.project_task_in_project_view_kanban"/>
+        <arch type="xml">
+            <xpath expr="//kanban[1]/templates[1]/t[@t-name='card']" position="inside">
+                <field name="x_global_timer_active" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//kanban[1]/templates[1]/t[@t-name='card']" position="inside">
+                <div t-if="record.x_global_timer_active.raw_value" class="mt-1 mb-1">
+                    <span class="badge rounded-pill text-bg-success d-inline-flex align-items-center gap-1 p-1" 
+                          title="Temporizador activo por un usuario"
+                          data-bs-toggle="tooltip">
+                        <i class="fa fa-spinner fa-spin" role="img" aria-label="Cronómetro Activo"/>
+                        <span>En curso</span>
+                    </span>
+                </div>
+            </xpath>
+        </arch>
+    </record>
+</odoo>
