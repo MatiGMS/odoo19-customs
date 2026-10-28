@@ -1,46 +1,9 @@
-// Paleta estándar Odoo de índices de color (0 a 11)
-$odoo-tag-colors: (
-    0: #6c757d,
-    1: #dc3545,
-    2: #fd7e14,
-    3: #ffc107,
-    4: #0dcaf0,
-    5: #6f42c1,
-    6: #d63384,
-    7: #198754,
-    8: #20c997,
-    9: #0d6efd,
-    10: #6610f2,
-    11: #795548
-);
-
-// Borde lateral visual en la tarjeta
-.card.o_has_tag_accent,
-.o_mrp_workorder_card.o_has_tag_accent {
-    border-left-width: 6px !important;
-    border-left-style: solid !important;
-
-    @each $idx, $color in $odoo-tag-colors {
-        &.o_tag_color_#{$idx} {
-            border-left-color: $color !important;
-        }
-    }
-}
-
-// Estilos de los badges de etiquetas
-.o_shopfloor_tag_container {
-    .o_shopfloor_badge {
-        font-size: 0.75rem !important;
-        padding: 0.3rem 0.6rem !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.02em;
-
-        @each $idx, $color in $odoo-tag-colors {
-            &.o_tag_color_#{$idx} {
-                background-color: rgba($color, 0.25) !important;
-                color: #ffffff !important;
-                border: 1px solid rgba($color, 0.7) !important;
-            }
-        }
+.o_shopfloor_custom_tags {
+    margin-top: 4px;
+    
+    .badge {
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
 }

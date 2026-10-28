@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
-    <!-- El nombre del template base en mrp_workorder suele ser mrp_workorder.Workorder -->
-    <t t-inherit="mrp_workorder.Workorder" t-inherit-mode="extension">
 
-        <!-- Inyectar la clase para el borde de color en la tarjeta -->
-        <xpath expr="//div[contains(@class, 'card') or contains(@class, 'o_mrp_workorder_card')]" position="attributes">
-            <attribute name="t-attf-class">{{ cardAccentClass }}</attribute>
-        </xpath>
-
-        <!-- Inyectar badges de etiquetas antes del bloque de notas o contenido central -->
+    <!-- En Odoo Shop Floor el template base de la ficha es mrp_workorder.Operation o mrp_workorder.Workorder -->
+    <t t-inherit="mrp_workorder.Operation" t-inherit-mode="extension">
         <xpath expr="//div[contains(@class, 'card-body')]/*[1]" position="before">
-            <div class="d-flex flex-wrap gap-1 mb-2 o_shopfloor_tag_container" t-if="productionTags.length">
-                <t t-foreach="productionTags" t-as="tag" t-key="tag.id">
-                    <span t-attf-class="badge rounded-pill o_shopfloor_badge o_tag_color_{{ tag.color }}">
-                        <i class="fa fa-tag me-1 opacity-75"/>
-                        <t t-esc="tag.name"/>
-                    </span>
-                </t>
-            </div>
+            <t t-if="record.tag_badges_html">
+                <div t-out="record.tag_badges_html"/>
+            </t>
         </xpath>
-
     </t>
+
+    <!-- Compatibilidad si el template en tu build se llama mrp_workorder.Workorder -->
+    <t t-inherit="mrp_workorder.Workorder" t-inherit-mode="extension">
+        <xpath expr="//div[contains(@class, 'card-body')]/*[1]" position="before">
+            <t t-if="record.tag_badges_html">
+                <div t-out="record.tag_badges_html"/>
+            </t>
+        </xpath>
+    </t>
+
 </templates>
