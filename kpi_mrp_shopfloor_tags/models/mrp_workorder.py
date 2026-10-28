@@ -1,23 +1,18 @@
-from odoo import models, fields, api
+# -*- coding: utf-8 -*-
+from odoo import models, fields
 
 class MrpWorkorder(models.Model):
     _inherit = 'mrp.workorder'
 
     production_tag_ids = fields.Many2many(
         related='production_id.tag_ids',
-        string='Etiquetas de Producción',
+        string='Etiquetas MO',
         readonly=True,
     )
 
-    # Si usas Odoo Shopfloor nativo, en v17/v18/v19 se cargan campos mediante búsqueda directa
-    # o vía get_workorder_data. Exponemos una función serializadora:
-    def _get_workorder_shopfloor_tags(self):
-        self.ensure_one()
-        return [
-            {
-                'id': tag.id,
-                'name': tag.name,
-                'color_index': tag.color or 0,
-            }
-            for tag in self.production_tag_ids
-        ]
+    def _get_shopfloor_fields(self):
+        """Asegura que el campo viaje en el payload RPC hacia los componentes OWL del Shopfloor."""
+        res = super()._get_shopfloor_fields() if hasattr(super(), '_get_shopfloor_fields') else []
+        if 'production_tag_ids' not in res:
+            res.append('production_tag_ids')
+        return res

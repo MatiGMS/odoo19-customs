@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
-    <t t-inherit="mrp_workorder.Workorder" t-inherit-mode="extension">
+    <t t-inherit="mrp_workorder.WorkorderCard" t-inherit-mode="extension">
         
-        <!-- Opcional: Alterar el borde/fondo de la tarjeta según el primer tag -->
-        <xpath expr="//div[hasclass('o_mrp_workorder_card')]" position="attributes">
-            <attribute name="t-attf-class">{{ record.production_tag_ids and record.production_tag_ids.length ? 'o_has_tags o_tag_color_' + (record.production_tag_ids[0].color || 0) : '' }}</attribute>
+        <!-- Dinamizar el acento o color de la tarjeta según la primera etiqueta -->
+        <xpath expr="//div[contains(@class, 'o_mrp_workorder_card')]" position="attributes">
+            <attribute name="t-attf-class">{{ record.production_tag_ids and record.production_tag_ids.length ? 'o_has_tags o_tag_border_' + record.production_tag_ids[0].color : '' }}</attribute>
         </xpath>
 
-        <!-- Inyección de Badges de Etiquetas en la cabecera o cuerpo de la ficha -->
-        <xpath expr="//div[hasclass('card-body')]//div[hasclass('card-title')]" position="after">
-            <div class="o_shopfloor_tags_container d-flex flex-wrap gap-1 mt-1 mb-2" t-if="record.production_tag_ids and record.production_tag_ids.length">
+        <!-- Insertar el listado de etiquetas debajo del título/código de MO -->
+        <xpath expr="//div[contains(@class, 'card-body')]//div[contains(@class, 'card-title')]" position="after">
+            <!-- Badges de mrp.production.tag -->
+            <div class="d-flex flex-wrap gap-1 mt-1 mb-2" t-if="record.production_tag_ids and record.production_tag_ids.length">
                 <t t-foreach="record.production_tag_ids" t-as="tag" t-key="tag.id">
-                    <span t-attf-class="badge rounded-pill o_tag_pill o_color_{{ tag.color || 0 }}">
-                        <i class="fa fa-tag me-1 small opacity-75"/>
+                    <span t-attf-class="badge rounded-pill o_tag_badge o_color_{{ tag.color }}">
+                        <i class="fa fa-tag me-1 opacity-75"/>
                         <t t-esc="tag.display_name or tag.name"/>
                     </span>
                 </t>
             </div>
         </xpath>
-        
+
     </t>
 </templates>

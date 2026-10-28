@@ -1,9 +1,13 @@
+# -*- coding: utf-8 -*-
 {
-    'name': 'KPI+ MRP Shop Floor Tags & Visual Styling',
+    'name': 'KPI+ Shop Floor MO Tags',
     'version': '19.0.1.0.0',
     'category': 'Manufacturing/Manufacturing',
-    'summary': 'Muestra etiquetas de mrp.production en las tarjetas del Shop Floor con estilo y acentos de color.',
-    'depends': ['mrp', 'mrp_workorder'],
+    'summary': 'Muestra etiquetas y badges de fabricación en las tarjetas del Shop Floor',
+    'depends': [
+        'mrp',
+        'mrp_workorder',
+    ],
     'data': [],
     'assets': {
         'web.assets_backend': [
