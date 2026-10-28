@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields
+from odoo import models, fields, api
 
 class MrpWorkorder(models.Model):
     _inherit = 'mrp.workorder'
@@ -10,9 +10,36 @@ class MrpWorkorder(models.Model):
         readonly=True,
     )
 
-    def _get_shopfloor_fields(self):
-        """Asegura que el campo viaje en el payload RPC hacia los componentes OWL del Shopfloor."""
-        res = super()._get_shopfloor_fields() if hasattr(super(), '_get_shopfloor_fields') else []
-        if 'production_tag_ids' not in res:
-            res.append('production_tag_ids')
+    def _get_workorder_data(self):
+        """Sobrescribe el payload individual de cada orden de trabajo para Shop Floor."""
+        data = super()._get_workorder_data()
+        # Empaquetamos id, nombre y color_index de cada tag de la orden padre
+        data['production_tags'] = [
+            {
+                'id': tag.id,
+                'name': tag.name,
+                'color': tag.color or 0,
+            }
+            for tag in self.production_id.tag_ids
+        ]
+        return data
+
+    @api.model
+    def get_workorders_data(self, domain=None):
+        """Asegura la compatibilidad si tu versión serializa directamente en bloque."""
+        res = super().get_workorders_data(domain=domain)
+        # Si el core utiliza un mapeo directo de workorders en res['workorders']:
+        if isinstance(res, dict) and 'workorders' in res:
+            workorders_by_id = {wo.id: wo for wo in self.browse([w['id'] for w in res['workorders'] if 'id' in w])}
+            for w_data in res['workorders']:
+                wo = workorders_by_id.get(w_data.get('id'))
+                if wo:
+                    w_data['production_tags'] = [
+                        {
+                            'id': tag.id,
+                            'name': tag.name,
+                            'color': tag.color or 0,
+                        }
+                        for tag in wo.production_id.tag_ids
+                    ]
         return res

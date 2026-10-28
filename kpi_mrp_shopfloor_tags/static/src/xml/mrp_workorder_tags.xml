@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
-    <t t-inherit="mrp_workorder.WorkorderCard" t-inherit-mode="extension">
-        
-        <!-- Dinamizar el acento o color de la tarjeta según la primera etiqueta -->
+    <t t-inherit="mrp_workorder.Workorder" t-inherit-mode="extension">
+
+        <!-- 1. Borde de color dinámico en la tarjeta -->
         <xpath expr="//div[contains(@class, 'o_mrp_workorder_card')]" position="attributes">
-            <attribute name="t-attf-class">{{ record.production_tag_ids and record.production_tag_ids.length ? 'o_has_tags o_tag_border_' + record.production_tag_ids[0].color : '' }}</attribute>
+            <attribute name="t-attf-class">{{ (record.production_tags and record.production_tags.length) ? ' o_has_tag_accent o_tag_color_' + (record.production_tags[0].color || 0) : '' }}</attribute>
         </xpath>
 
-        <!-- Insertar el listado de etiquetas debajo del título/código de MO -->
-        <xpath expr="//div[contains(@class, 'card-body')]//div[contains(@class, 'card-title')]" position="after">
-            <!-- Badges de mrp.production.tag -->
-            <div class="d-flex flex-wrap gap-1 mt-1 mb-2" t-if="record.production_tag_ids and record.production_tag_ids.length">
-                <t t-foreach="record.production_tag_ids" t-as="tag" t-key="tag.id">
-                    <span t-attf-class="badge rounded-pill o_tag_badge o_color_{{ tag.color }}">
+        <!-- 2. Badges de etiquetas: inyectados inmediatamente arriba de la caja de especificaciones/notas -->
+        <xpath expr="//div[contains(@class, 'card-body')]//div[contains(@class, 'card-text') or contains(@class, 'o_workorder_note') or contains(@class, 'border')]" position="before">
+            <div class="d-flex flex-wrap gap-1 mb-2 o_shopfloor_tag_box" t-if="record.production_tags and record.production_tags.length">
+                <t t-foreach="record.production_tags" t-as="tag" t-key="tag.id">
+                    <span t-attf-class="badge rounded-pill o_shopfloor_badge o_tag_badge_{{ tag.color || 0 }}">
                         <i class="fa fa-tag me-1 opacity-75"/>
-                        <t t-esc="tag.display_name or tag.name"/>
+                        <t t-esc="tag.name"/>
                     </span>
                 </t>
             </div>
