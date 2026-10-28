@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
+    <!-- El nombre del template base en mrp_workorder suele ser mrp_workorder.Workorder -->
     <t t-inherit="mrp_workorder.Workorder" t-inherit-mode="extension">
 
-        <!-- 1. Borde de color dinámico en la tarjeta -->
-        <xpath expr="//div[contains(@class, 'o_mrp_workorder_card')]" position="attributes">
-            <attribute name="t-attf-class">{{ (record.production_tags and record.production_tags.length) ? ' o_has_tag_accent o_tag_color_' + (record.production_tags[0].color || 0) : '' }}</attribute>
+        <!-- Inyectar la clase para el borde de color en la tarjeta -->
+        <xpath expr="//div[contains(@class, 'card') or contains(@class, 'o_mrp_workorder_card')]" position="attributes">
+            <attribute name="t-attf-class">{{ cardAccentClass }}</attribute>
         </xpath>
 
-        <!-- 2. Badges de etiquetas: inyectados inmediatamente arriba de la caja de especificaciones/notas -->
-        <xpath expr="//div[contains(@class, 'card-body')]//div[contains(@class, 'card-text') or contains(@class, 'o_workorder_note') or contains(@class, 'border')]" position="before">
-            <div class="d-flex flex-wrap gap-1 mb-2 o_shopfloor_tag_box" t-if="record.production_tags and record.production_tags.length">
-                <t t-foreach="record.production_tags" t-as="tag" t-key="tag.id">
-                    <span t-attf-class="badge rounded-pill o_shopfloor_badge o_tag_badge_{{ tag.color || 0 }}">
+        <!-- Inyectar badges de etiquetas antes del bloque de notas o contenido central -->
+        <xpath expr="//div[contains(@class, 'card-body')]/*[1]" position="before">
+            <div class="d-flex flex-wrap gap-1 mb-2 o_shopfloor_tag_container" t-if="productionTags.length">
+                <t t-foreach="productionTags" t-as="tag" t-key="tag.id">
+                    <span t-attf-class="badge rounded-pill o_shopfloor_badge o_tag_color_{{ tag.color }}">
                         <i class="fa fa-tag me-1 opacity-75"/>
                         <t t-esc="tag.name"/>
                     </span>

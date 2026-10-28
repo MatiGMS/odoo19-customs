@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'KPI+ Shop Floor MO Tags',
+    'name': 'KPI+ MRP Shop Floor Tags',
     'version': '19.0.1.0.0',
     'category': 'Manufacturing/Manufacturing',
-    'summary': 'Muestra etiquetas de mrp.production en el Shopfloor de Odoo',
+    'summary': 'Muestra etiquetas de producción en las tarjetas del módulo Taller',
     'depends': [
         'mrp',
         'mrp_workorder',
@@ -12,11 +12,12 @@
     'assets': {
         'web.assets_backend': [
             'kpi_mrp_shopfloor_tags/static/src/scss/mrp_workorder_tags.scss',
+            'kpi_mrp_shopfloor_tags/static/src/js/workorder_tags.js',
             'kpi_mrp_shopfloor_tags/static/src/xml/mrp_workorder_tags.xml',
         ],
-        # Bundle específico de Shop Floor (crítico si no carga en la terminal)
         'mrp_workorder.assets_shopfloor': [
             'kpi_mrp_shopfloor_tags/static/src/scss/mrp_workorder_tags.scss',
+            'kpi_mrp_shopfloor_tags/static/src/js/workorder_tags.js',
             'kpi_mrp_shopfloor_tags/static/src/xml/mrp_workorder_tags.xml',
         ],
     },

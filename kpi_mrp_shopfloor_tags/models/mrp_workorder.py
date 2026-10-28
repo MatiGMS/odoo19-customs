@@ -11,10 +11,9 @@ class MrpWorkorder(models.Model):
     )
 
     def _get_workorder_data(self):
-        """Sobrescribe el payload individual de cada orden de trabajo para Shop Floor."""
-        data = super()._get_workorder_data()
-        # Empaquetamos id, nombre y color_index de cada tag de la orden padre
-        data['production_tags'] = [
+        """Inyecta los datos directos al diccionario que consume la tarjeta en el frontend."""
+        res = super()._get_workorder_data()
+        res['production_tags'] = [
             {
                 'id': tag.id,
                 'name': tag.name,
@@ -22,24 +21,28 @@ class MrpWorkorder(models.Model):
             }
             for tag in self.production_id.tag_ids
         ]
-        return data
+        return res
 
     @api.model
     def get_workorders_data(self, domain=None):
-        """Asegura la compatibilidad si tu versión serializa directamente en bloque."""
+        """Asegura que en la carga masiva inicial las etiquetas viajen en cada registro."""
         res = super().get_workorders_data(domain=domain)
-        # Si el core utiliza un mapeo directo de workorders en res['workorders']:
-        if isinstance(res, dict) and 'workorders' in res:
-            workorders_by_id = {wo.id: wo for wo in self.browse([w['id'] for w in res['workorders'] if 'id' in w])}
-            for w_data in res['workorders']:
-                wo = workorders_by_id.get(w_data.get('id'))
-                if wo:
-                    w_data['production_tags'] = [
-                        {
-                            'id': tag.id,
-                            'name': tag.name,
-                            'color': tag.color or 0,
-                        }
-                        for tag in wo.production_id.tag_ids
-                    ]
+        # res suele ser una lista de dicts o un dict con clave 'workorders'
+        records = res if isinstance(res, list) else res.get('workorders', [])
+        
+        # Mapeo rápido en bloque para no generar N+1 queries
+        wo_ids = [w['id'] for w in records if isinstance(w, dict) and 'id' in w]
+        workorders = self.browse(wo_ids)
+        tags_per_wo = {
+            wo.id: [
+                {'id': t.id, 'name': t.name, 'color': t.color or 0} 
+                for t in wo.production_id.tag_ids
+            ]
+            for wo in workorders
+        }
+
+        for w in records:
+            if isinstance(w, dict) and w.get('id') in tags_per_wo:
+                w['production_tags'] = tags_per_wo[w['id']]
+
         return res
