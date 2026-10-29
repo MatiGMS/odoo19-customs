@@ -4,10 +4,14 @@
         <field name="name">stock.picking.form.inherit.empty.lot</field>
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
-        <field name="priority">99</field>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='move_ids_without_package']/list//field[@name='lot_ids']" position="attributes">
-                <attribute name="context">{'default_company_id': company_id, 'default_product_id': product_id, 'active_picking_id': parent.id, 'default_lot_ids': [(5, 0, 0)]}</attribute>
+                <attribute name="context">{
+                    'default_company_id': company_id,
+                    'default_product_id': product_id,
+                    'active_picking_id': parent.id,
+                    'default_lot_ids': []
+                }</attribute>
             </xpath>
         </field>
     </record>
