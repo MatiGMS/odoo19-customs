@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'KPI+ MRP Shop Floor Tags & Specs',
+    'name': 'KPI+ MRP Shop Floor Tags Display',
     'version': '19.0.1.0.0',
     'category': 'Manufacturing/Manufacturing',
-    'summary': 'Etiquetas y especificaciones visuales en tarjetas de Taller',
+    'summary': 'Muestra etiquetas de mrp.production en las tarjetas del Shop Floor',
     'depends': ['mrp', 'mrp_workorder'],
     'data': [],
     'assets': {
         'web.assets_backend': [
+            'kpi_mrp_shopfloor_tags/static/src/scss/mrp_workorder_tags.scss',
+            'kpi_mrp_shopfloor_tags/static/src/xml/mrp_workorder_tags.xml',
+        ],
+        'mrp_workorder.assets_shopfloor': [
             'kpi_mrp_shopfloor_tags/static/src/scss/mrp_workorder_tags.scss',
             'kpi_mrp_shopfloor_tags/static/src/xml/mrp_workorder_tags.xml',
         ],
