@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_packaging_uom" model="ir.ui.view">
+        <name>sale.order.form.inherit.packaging.uom</name>
+        <model>sale.order</model>
+        <inherit_id ref="sale.view_order_form"/>
+        <arch>type="xml">
+            <!-- Ocultamos la columna nativa product_uom / product_uom_id -->
+            <xpath expr="//field[@name='order_line']/list/field[@name='product_uom']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            
+            <!-- Insertamos nuestro display en su lugar -->
+            <xpath expr="//field[@name='order_line']/list/field[@name='product_uom']" position="after">
+                <field name="packaging_uom_display" string="Unidad" readonly="1"/>
+            </xpath>
+        </arch>
+    </record>
+</odoo>
