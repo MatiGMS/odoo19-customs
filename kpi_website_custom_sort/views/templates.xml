@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sort_bestseller_option" inherit_id="website_sale.sort" priority="20">
+        <xpath expr="//div[hasclass('dropdown-menu')]" position="inside">
+            <a role="menuitem"
+               rel="noindex,nofollow"
+               t-att-href="keep('/shop', order='bestseller')"
+               class="dropdown-item">
+                <span>Más vendido</span>
+            </a>
+        </xpath>
+    </template>
+</odoo>
