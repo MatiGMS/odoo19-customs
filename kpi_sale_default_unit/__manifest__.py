@@ -1,5 +1,5 @@
 {
-    'name': 'KPI+ Sale Default Unit / Packaging',
+    'name': 'KPI+ Sale Default Unit',
     'version': '19.0.1.0.0',
     'category': 'Sales/Sales',
     'author': 'KPI+',
@@ -7,8 +7,7 @@
     'depends': [
         'sale',
         'sale_management',
-        'stock',
-        'sale_stock',
+        'uom',
     ],
     'data': [],
     'installable': True,
