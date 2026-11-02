@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_purchase_stock_max_warning_wizard_form" model="ir.ui.view">
+        <field name="name">purchase.stock.max.warning.wizard.form</field>
+        <field name="model">purchase.stock.max.warning.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Alerta de Stock Máximo">
+                <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
+                    <i class="fa fa-exclamation-triangle fa-2x me-3"/>
+                    <div>
+                        <strong>Atención:</strong> Se detectaron inconsistencias con el stock máximo permitido.
+                    </div>
+                </div>
+                <field name="message" widget="text" readonly="1" nolabel="1" class="fw-bold text-dark"/>
+                <footer>
+                    <button string="Entendido y Revisar" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

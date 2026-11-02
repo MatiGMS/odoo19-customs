@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_order_form_inherit_stock_max" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.stock.max</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="_check_max_stock_notification" 
+                        string="Verificar Stock Máx" 
+                        type="object" 
+                        class="btn-secondary"
+                        invisible="state not in ('draft', 'sent')"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
