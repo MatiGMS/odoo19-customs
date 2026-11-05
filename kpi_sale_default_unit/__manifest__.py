@@ -8,8 +8,16 @@
         'sale',
         'sale_management',
         'uom',
+        'website_sale',
     ],
-    'data': [],
+    'data': [
+        'views/sale_order_views.xml',
+    ],
+    'assets': {
+        'web.assets_frontend': [
+            'kpi_sale_default_unit/static/src/js/website_sale_default_uom.js',
+        ],
+    },
     'installable': True,
     'application': False,
     'auto_install': False,
