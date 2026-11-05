@@ -2,17 +2,20 @@
 {
     'name': 'KPI Purchase Catalog Stock Max Warning',
     'version': '19.0.1.0.0',
-    'category': 'Inventory/Purchase',
-    'summary': 'Valida stock máximo directamente contra la cantidad pedida',
+    'category': 'Purchases',
+    'summary': 'Alerta interactiva de stock máximo al salir del catálogo de compras',
     'author': 'KPI+',
     'license': 'LGPL-3',
     'depends': [
         'purchase',
+        'product',
     ],
-    'data': [
-        'security/ir.model.access.csv',
-        'views/stock_warning_wizard_views.xml',
-    ],
+    'data': [],
+    'assets': {
+        'web.assets_backend': [
+            'kpi_purchase_catalog_alert/static/src/js/product_catalog_controller.js',
+        ],
+    },
     'installable': True,
     'application': False,
     'auto_install': False,

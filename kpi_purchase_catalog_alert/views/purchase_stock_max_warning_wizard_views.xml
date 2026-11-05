@@ -8,12 +8,13 @@
                 <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
                     <i class="fa fa-exclamation-triangle fa-2x me-3"/>
                     <div>
-                        <strong>Atención:</strong> Se detectaron inconsistencias con el stock máximo permitido.
+                        <h5 class="alert-heading mb-1">Inconsistencia en Cantidades Pedidas</h5>
+                        <span>Se sugiere reducir las unidades para cumplir con el límite configurado.</span>
                     </div>
                 </div>
-                <field name="message" widget="text" readonly="1" nolabel="1" class="fw-bold text-dark"/>
+                <field name="message" widget="text" readonly="1" nolabel="1" class="text-dark fw-bold"/>
                 <footer>
-                    <button string="Entendido y Revisar" class="btn-primary" special="cancel"/>
+                    <button string="Entendido y Continuar" name="action_continue" type="object" class="btn-primary"/>
                 </footer>
             </form>
         </field>
