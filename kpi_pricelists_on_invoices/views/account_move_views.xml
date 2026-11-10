@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- 1. Vista de Formulario de Factura -->
+    <record id="view_move_form_inherit_sale_pricelist" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.sale.pricelist</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_user_id']" position="after">
+                <field name="sale_pricelist_id" 
+                       invisible="move_type not in ('out_invoice', 'out_refund') or not sale_pricelist_id"
+                       readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 2. Vista Lista: Contabilidad -> Clientes -> Facturas (/odoo/customer-invoices) -->
+    <record id="view_out_invoice_tree_inherit_sale_pricelist" model="ir.ui.view">
+        <field name="name">account.move.out.invoice.tree.inherit.sale.pricelist</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_out_invoice_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_date']" position="before">
+                <field name="sale_pricelist_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 3. Vista Lista: Contactos -> Invoiced (Smart button genérico) -->
+    <record id="view_move_tree_inherit_sale_pricelist" model="ir.ui.view">
+        <field name="name">account.move.tree.inherit.sale.pricelist</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date']" position="after">
+                <field name="sale_pricelist_id" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
