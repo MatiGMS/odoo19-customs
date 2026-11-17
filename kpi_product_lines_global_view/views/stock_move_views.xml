@@ -1,47 +1,56 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <!-- 1. Vista List (Reemplaza a Tree) -->
+<!-- Vista List (Editable) -->
     <record id="view_tree_stock_move_deliveries" model="ir.ui.view">
         <field name="name">stock.move.list.deliveries</field>
         <field name="model">stock.move</field>
         <field name="arch" type="xml">
-            <!-- Cambio crítico: <list> en lugar de <tree> -->
-            <list string="Líneas de Entrega" create="0" edit="0" delete="0" sample="1">
-                <field name="picking_id" string="N° Orden" decoration-bf="1"/>
-                <field name="partner_id" string="Cliente"/>
-                <field name="product_id" string="Producto"/>
-                <field name="product_uom_qty" string="Demanda" sum="Total Demanda"/>
-                <field name="quantity" string="Cantidad" sum="Total Cantidad"/>
+            <list string="Líneas de Entrega" create="0" delete="0" sample="1" editable="bottom">
+                <field name="picking_id" string="N° Orden" decoration-bf="1" readonly="1"/>
+                <field name="partner_id" string="Cliente" readonly="1"/>
+                <field name="x_zona_cliente" readonly="1" optional="show"/>
+                <field name="x_expreso" readonly="1" optional="show"/>
+                
+                <!-- Tu nuevo campo de fecha, es el único editable (sin readonly="1") -->
+                <field name="x_fecha_informativa"/>
+                
+                <field name="product_id" string="Producto" readonly="1"/>
+                <field name="product_uom_qty" string="Demanda" sum="Total Demanda" readonly="1"/>
+                <field name="quantity" string="Cantidad" sum="Total Cantidad" readonly="1"/>
                 <field name="state" widget="badge" 
                        decoration-success="state == 'done'" 
-                       decoration-info="state not in ('done', 'cancel')"/>
+                       decoration-info="state not in ('done', 'cancel')"
+                       readonly="1"/>
             </list>
         </field>
     </record>
 
-    <!-- 2. Acción de Ventana -->
-    <record id="action_stock_move_deliveries" model="ir.actions.act_window">
-        <field name="name">Líneas de Entregas</field>
-        <field name="res_model">stock.move</field>
-        <!-- Cambio crítico: view_mode list,form -->
-        <field name="view_mode">list,form</field>
-        <field name="domain">[('picking_id.picking_type_id.code', '=', 'outgoing')]</field>
-        <field name="context">{'search_default_by_picking': 1}</field>
+    <!-- Vista Form (Limpia y Organizada) -->
+    <record id="view_form_stock_move_deliveries_clean" model="ir.ui.view">
+        <field name="name">stock.move.form.deliveries.clean</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <form string="Línea de Entrega" create="0" delete="0">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,assigned,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="product_id" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group name="info_principal" string="Información del Cliente">
+                            <field name="picking_id" readonly="1"/>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="x_zona_cliente" readonly="1"/>
+                            <field name="x_expreso" readonly="1"/>
+                        </group>
+                        <group name="cantidades_fechas" string="Gestión Operativa">
+                            <field name="product_uom_qty" readonly="1"/>
+                            <field name="quantity" readonly="1"/>
+                            <!-- Campo editable en el form -->
+                            <field name="x_fecha_informativa"/> 
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
     </record>
-
-    <!-- 3. Enlace explícito Acción-Vista -->
-    <record id="action_stock_move_deliveries_list_view" model="ir.actions.act_window.view">
-        <field name="sequence" eval="1"/>
-        <!-- Cambio crítico: view_mode list -->
-        <field name="view_mode">list</field>
-        <field name="view_id" ref="view_tree_stock_move_deliveries"/>
-        <field name="act_window_id" ref="action_stock_move_deliveries"/>
-    </record>
-
-    <!-- 4. Elemento de Menú -->
-    <menuitem id="menu_stock_move_deliveries"
-              name="Líneas de Entregas"
-              parent="stock.menu_stock_warehouse_mgmt"
-              action="action_stock_move_deliveries"
-              sequence="6"/>
-</odoo>
