@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form_overdue_warn_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.form.overdue.warn.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//sheet" position="before">
+                <!-- Se añaden los mismos grupos de permisos y la misma condición de visibilidad de la OCA -->
+                <div class="alert alert-warning mb-0" 
+                     role="alert" 
+                     groups="account.group_account_invoice,account.group_account_readonly"
+                     invisible="not sale_id or sale_overdue_invoice_count == 0">
+                    
+                    El socio de facturación 
+                    <field name="sale_commercial_partner_invoicing_id" readonly="1" class="fw-bold"/> 
+                    tiene <field name="sale_overdue_invoice_count" readonly="1"/> 
+                    
+                    <button string="factura(s) vencida(s)" 
+                            type="object" 
+                            name="action_jump_to_overdue_invoices_picking" 
+                            class="btn btn-link p-0 align-baseline"/> 
+                    
+                    para un residuo total de 
+                    <field name="sale_overdue_invoice_amount" widget="monetary" readonly="1"/>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
