@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form_oca_warning_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.form.oca.warning.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//sheet" position="before">
+                <!-- El div replica el color del cartel y se oculta si no hay deuda -->
+                <div class="alert alert-warning mb-0" role="alert" invisible="not sale_has_overdue">
+                    
+                    El socio de facturación 
+                    <field name="sale_partner_invoice_id" readonly="1" class="fw-bold"/> 
+                    tiene <field name="sale_overdue_count" readonly="1"/> 
+                    
+                    <!-- Este es el botón celeste de tu imagen -->
+                    <button name="action_view_overdue_invoices_from_picking" 
+                            type="object" 
+                            string="factura(s) vencida(s)" 
+                            class="btn btn-link p-0 align-baseline"/> 
+                    
+                    para un residuo total de 
+                    <field name="sale_overdue_amount" widget="monetary" readonly="1"/>
+                
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
