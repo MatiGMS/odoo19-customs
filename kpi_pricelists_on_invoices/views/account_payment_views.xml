@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_payment_form_inherit_pricelist" model="ir.ui.view">
+        <field name="name">account.payment.form.inherit.pricelist</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <!-- Prioridad 999: Asegura cargar DESPUÉS de account_payment_pro y de Studio -->
+        <field name="priority" eval="999"/> 
+        <field name="arch" type="xml">
+            
+            <!-- XPath tolerante a fallos: Busca el campo directamente sin importar el contenedor -->
+            <xpath expr="//field[@name='move_name']" position="after">
+                <field name="sale_pricelist_id" string="Tarifa de Venta" optional="show"/>
+            </xpath>
+            
+        </field>
+    </record>
+</odoo>
