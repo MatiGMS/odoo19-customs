@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_ws_info" model="ir.ui.view">
+        <field name="name">sale.order.form.ws.info</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='other_information']//group[@name='sales_person']" position="inside">
+                <field name="ws_client_name"/>
+                <field name="ws_commission"/>
+                <field name="ws_is_new_client"/>
+                <field name="ws_indications"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="cart_salesperson_info_template" inherit_id="website_sale.cart">
+        <xpath expr="." position="inside">
+            <div class="container mt-4 mb-5" id="kpi_salesperson_info_container">
+                <div class="card border-primary shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <i class="fa fa-briefcase mr-2"/> Información de Venta (Solo Uso Interno)
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Cliente -->
+                            <div class="col-md-6 mb-3">
+                                <label class="font-weight-bold">Cliente *</label>
+                                <input type="text" name="ws_client_name" class="form-control ws_info_input" 
+                                       t-att-value="website_sale_order.ws_client_name" 
+                                       placeholder="Nombre del cliente real"/>
+                            </div>
+                            
+                            <!-- Comisiones -->
+                            <div class="col-md-6 mb-3">
+                                <label class="font-weight-bold">Comisiones *</label>
+                                <input type="text" name="ws_commission" class="form-control ws_info_input" 
+                                       t-att-value="website_sale_order.ws_commission" 
+                                       placeholder="Ej. 10% o $500"/>
+                            </div>
+                            
+                            <!-- Indicaciones -->
+                            <div class="col-md-12 mb-3">
+                                <label class="font-weight-bold">Indicaciones *</label>
+                                <textarea name="ws_indications" class="form-control ws_info_input" rows="2" 
+                                          placeholder="Instrucciones logísticas o comerciales..."><t t-esc="website_sale_order.ws_indications"/></textarea>
+                            </div>
+                            
+                            <!-- Cliente Nuevo (Checkbox) -->
+                            <div class="col-md-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="ws_is_new_client" class="custom-control-input ws_info_input" 
+                                           id="ws_is_new_client" 
+                                           t-att-checked="website_sale_order.ws_is_new_client"/>
+                                    <label class="custom-control-label" for="ws_is_new_client">Es un Cliente Nuevo</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
