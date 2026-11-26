@@ -1,0 +1,114 @@
+<odoo>
+    <data>
+        <template id="portal_my_home_pricelist_breadcrumbs" inherit_id="portal.portal_breadcrumbs" priority="20">
+            <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+                <li t-if="page_name == 'product_pricelist'" class="breadcrumb-item">
+                    <t>Product Pricelist</t>
+                </li>
+            </xpath>
+        </template>
+
+        <template id="portal_my_home_pricelist_download" name="Portal My Home : Product pricelist"
+                  inherit_id="portal.portal_my_home">
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+                <t t-if="request.env.user.partner_id.allow_pricelist_download" t-call="portal.portal_docs_entry">
+                    <t t-set="title">Product Pricelist Download</t>
+                    <t t-set="url" t-value="'/my/product-pricelist'"/>
+                    <t t-set="placeholder_count" t-value="'pricelist_count'"/>
+                    <t t-set="icon" t-value="'/pricelist_portal_download_pyb/static/img/list.svg'"/>
+                    <t t-set="text">Get special prices according to your pricelist</t>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="portal_product_pricelist_page" name="Pricelist Download">
+            <t t-call="portal.portal_layout">
+                <style>
+                    .select2 {
+                    width:100%!important;
+                    }
+                </style>
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Pricelist Download</t>
+                </t>
+                <div class="container mt-4" id="pricelist_portal_download_pyb">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6 col-md-8">
+                            <div class="card shadow border-0">
+                                <div class="card-header bg-primary text-white text-center py-4">
+                                    <h3 class="mb-2">
+                                        <i class="fa fa-file-text-o me-2"/>Download Product Pricelist
+                                    </h3>
+                                    <p class="mb-0 small">Get special prices according to your pricelist</p>
+                                </div>
+                                <div class="card-body p-4">
+                                    <form action="/customer/pricelist" method="POST" id="pricelist_download">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                        <div class="mb-3">
+                                            <label for="pricelist_file_type" class="form-label fw-bold">
+                                                <i class="fa fa-file me-1"/>File Type
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <select class="form-select" id="pricelist_file_type" required=""
+                                                    name="pricelist_file_type">
+                                                <option class="text-muted" selected="" value="">-- Select File Type --
+                                                </option>
+                                                <option value="pdf">PDF</option>
+                                                <option value="excel">Excel</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="pricelist_product_categ" class="form-label fw-bold">
+                                                <i class="fa fa-tags me-1"/>Product Category
+                                            </label>
+                                            <select class="form-select w-100" id="pricelist_product_categ"
+                                                    name="pricelist_product_categ" multiple="multiple"
+                                                    style="max-width: 100%;">
+                                                <t t-foreach="ecom_categories" t-as="categ">
+                                                    <option t-att-value="categ['id']" t-esc="categ['name']"/>
+                                                </t>
+                                            </select>
+                                            <small class="form-text text-muted d-block mt-1">
+                                                <i class="fa fa-info-circle"/>Hold Ctrl/Cmd to select multiple. Leave
+                                                empty for all products.
+                                            </small>
+                                        </div>
+
+                                        <div class="mb-3" t-if="show_stock_filter">
+                                            <label for="availability_filter" class="form-label fw-bold">
+                                                <i class="fa fa-cubes me-1"/>Stock Availability
+                                            </label>
+                                            <select class="form-select" id="availability_filter"
+                                                    name="availability_filter">
+                                                <option value="">All Products</option>
+                                                <option value="in_stock">In Stock Only</option>
+                                                <option value="out_of_stock">Out of Stock Only</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-check mb-4">
+                                            <input class="form-check-input" type="checkbox" id="group_by_category"
+                                                   name="group_by_category" value="1"/>
+                                            <label class="form-check-label" for="group_by_category">
+                                                <i class="fa fa-object-group me-1"/>Group by Category
+                                            </label>
+                                        </div>
+
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary btn-lg">
+                                                <i class="fa fa-download me-2"/>Download Pricelist
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="product_pricelist_document">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <t t-set="doc" t-value="docs.with_context(lang=docs.lang)"/>
+                    <div class="page" t-if="pricelist_products">
+                        <h2 class="text-center">Lista de precios</h2>
+                        <h5 t-if="e_com_categ">
+                            Product Category:
+                            <b t-esc="', '.join(e_com_categ.mapped('name'))"/>
+                        </h5>
+                        <span class="float-right">Fecha:
+                            <b t-esc="current_date"/>
+                        </span>
+                        <div class="clearfix"/>
+
+                        <t t-if="group_by_category">
+                            <t t-foreach="pricelist_products" t-as="group">
+                                <h4 class="mt-4 mb-2" style="background-color: #D3D3D3; padding: 8px;">
+                                    <t t-esc="group.get('category_name', group['category'].name if group['category'] else 'Uncategorized')"/>
+                                </h4>
+                                <table class="table table-sm mt-2">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Código</th>
+                                            <th class="text-center">Código de barras</th>
+                                            <th class="text-center">Nombre del producto</th>
+                                            <th class="text-center">Presentación</th>
+                                            <th class="text-center">IVA</th>
+                                            <!-- NUEVA COLUMNA -->
+                                            <th class="text-center">Cant. Mínima</th>
+                                            <th class="text-end p-1">Precio</th>
+                                            <th class="text-center">Última actualización</th>
+                                            <th t-if="group['products'] and group['products'][0]['show_product_stock']" class="text-center">Disponibilidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="group['products']" t-as="pricelist_product">
+                                            <t t-call="pricelist_portal_download_pyb.product_row_template"/>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <table class="table table-sm mt-2">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Código</th>
+                                        <th class="text-center">Código de barras</th>
+                                        <th class="text-center">Nombre del producto</th>
+                                        <th class="text-center">Presentación</th>
+                                        <th class="text-center">IVA</th>
+                                        <!-- NUEVA COLUMNA -->
+                                        <th class="text-center">Cant. Mínima</th>
+                                        <th class="text-end p-1">Precio</th>
+                                        <th class="text-center">Última actualización</th>
+                                        <th t-if="pricelist_products and pricelist_products[0]['show_product_stock']" class="text-center">Disponibilidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="pricelist_products" t-as="pricelist_product">
+                                        <t t-call="pricelist_portal_download_pyb.product_row_template"/>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+                    <div t-else="">
+                        <span>You do not have any products in the pricelist!</span>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <template id="product_row_template">
+            <tr>
+                <td class="p-1">
+                    <t t-esc="pricelist_product['product_id'].default_code"/>
+                </td>
+                <td class="p-1">
+                    <t t-esc="pricelist_product['product_id'].barcode"/>
+                </td>
+                <td class="p-1">
+                    <t t-esc="pricelist_product['product_id'].with_context(display_default_code=False).display_name"/>
+                </td>
+                <td class="p-1 text-center">
+                    <t t-esc="pricelist_product['product_id'].x_studio_presentacion"/>
+                </td>
+                <td class="p-1 text-center">
+                    <t t-esc="', '.join(tax.name for tax in pricelist_product['product_id'].taxes_id)"/>
+                </td>
+                <td class="p-1 text-center">
+                    <t t-esc="pricelist_product.get('min_quantity', 1.0)" t-options='{"widget": "float", "precision": 2}'/>
+                </td>
+                <td class="text-end p-1">
+                    <t t-esc="pricelist_product['price']" t-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                </td>
+                <td class="p-1 text-center">
+                    <t t-esc="pricelist_product['product_id'].product_tmpl_id.write_date"/>
+                </td>
+                <td t-if="pricelist_product['show_product_stock']" class="text-center p-1">
+                    <t t-if="pricelist_product['stock_display_option'] == 'quantity'">
+                        <t t-esc="pricelist_product['stock_on_hand']" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
+                    </t>
+                    <t t-else="">
+                        <t t-if="pricelist_product['stock_on_hand'] &gt; 0">
+                            Disponible
+                        </t>
+                        <t t-else="">
+                            Sin stock
+                        </t>
+                    </t>
+                </td>
+            </tr>
+        </template>
+    
+    </data>
+</odoo>
